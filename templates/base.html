@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="base.css">
+    <title>Face Detector</title>
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400&display=swap');
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Poppins', sans-serif;
+}
+
+.navbar {
+     
+    background-size: cover;
+    padding: 10px 20px;
+    color: white;
+    background-color: transparent; 
+}
+
+
+.logo {
+    font-size: 50px;
+    font-weight: bold;
+    animation: glow 2s ease-in-out infinite alternate; 
+    text-align: center;
+    cursor: pointer;
+    text-decoration:underline;
+    text-decoration: wavy;
+}
+
+@keyframes glow {
+    0% {
+        text-shadow: 0 0 10px rgba(255, 255, 255, 0.5); 
+    }
+    100% {
+        text-shadow: 0 0 20px rgba(255, 255, 255, 1); 
+    }
+}
+
+.content {
+    display: flex;
+}
+
+.section {
+    flex: 1;
+    padding: 20px;
+    background-color: #f4f4f4;
+}
+body {
+    background-color: #333333; 
+    color: #fff; 
+    background-image: url('../static/Untitled\ design\ \(10\).png');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
+}
+.navbar-brand {
+    display: flex;
+    align-items: center;
+    color: #ffffff;
+    font-weight: bold;
+}
+.navbar-brand img {
+    width: 30px;
+    height: auto;
+    margin-right: 10px;
+}
+.upload-section,
+.webcam-section {
+    padding: 20px;
+    opacity: 100%;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5); 
+    margin: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: 0.9s;
+    background-image: url('../static/star.jpg');
+    opacity: 90%;
+}
+.upload-section h2,
+.webcam-section h2 {
+    margin-bottom: 10px;
+    font-size: 40px;
+    color: #FFFFFF;
+    animation: glow 2s ease-in-out infinite alternate; 
+}
+
+h1{
+    font-size: 60px;
+    animation: glow 2s ease-in-out infinite alternate; 
+}
+.webcam-frame {
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+    position: relative;
+    overflow: hidden; 
+}
+.webcam-frame img {
+    max-width: 200%;
+    max-height: 200%;
+    opacity: 100%;
+}
+.btn-upload {
+    background-image: url('../static/Untitled\ design\ \(10\).png');
+    border:none;
+    color: #fff;
+    font-size: 20px;
+    transition: 0.3s;
+    border-radius: 5px;
+    padding: 15px 20px;
+    cursor: pointer;
+}
+.btn-upload:hover {
+    background-image: url('../static/Untitled\ design\ \(9\).png'); 
+    border: none;
+}
+.btn-camera-switch{
+    background-image: url('../static/Untitled\ design\ \(10\).png');
+    border:none;
+    color: #fff;
+    font-size: 20px;
+    transition: 0.3s;
+    border-radius: 5px;
+    padding: 15px 20px;
+    cursor: pointer;
+}
+.btn-camera-switch:hover{
+    background-image: url('../static/Untitled\ design\ \(9\).png'); 
+    border: none;
+}
+
+.uploaded-image {
+    width: flex;
+    max-width: flex;
+    height: flex;
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+}
+
+.uploaded-image img {
+    max-width: 50%;
+    height: auto;
+}
+
+footer{
+    background-color: transparent;
+    color: #fff;
+    margin-top: 185px;
+    margin-bottom: 0px;
+    justify-content: center;
+    transition: 0.9s;
+}
+
+
+footer:hover{
+    background-image: url('../static/star.jpg');
+}
+footer .last{
+    text-align: center;
+}
+h5{
+    text-align: center;
+    justify-content: center;
+    padding-top: 20px;
+    padding-bottom: 20px;
+
+}
+
+
+@media (max-width: 768px) {
+    .content {
+        flex-direction: column;
+    }
+}
+
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">FACE DETECTOR</div>
+    </nav>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="upload-section">
+                    <h2>Upload an Image</h2>
+                    <input type="file" accept="image/*" id="uploadInput">
+                    <button class="btn-upload" onclick="handleUpload()">Upload</button>
+                    <div class="uploaded-image" id="uploadedImage">
+                        
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="webcam-section">
+                    <h2>Webcam</h2>
+                    <h3>Live Face Detection</h3>
+                    <button class="btn-camera-switch" id="cameraSwitchButton">Turn on Camera</button>
+                    <div class="webcam-frame">
+                        <img id="webcamImage">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+<script>
+
+function handleUpload() {
+        const uploadInput = document.getElementById('uploadInput');
+        const uploadedImage = document.getElementById('uploadedImage');
+        
+        if (uploadInput.files && uploadInput.files[0]) {
+            const reader = new FileReader();
+            
+            reader.onload = function (e) {
+                const formData = new FormData();
+                formData.append('image', uploadInput.files[0]);
+                
+                // Send the image to the server for processing
+                fetch('/process_image', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.blob())
+                .then(blob => {
+                    const processedImageURL = URL.createObjectURL(blob);
+                    uploadedImage.innerHTML = `<img src="${processedImageURL}" alt="Processed Image">`;
+                })
+                .catch(error => {
+                    console.error('Error processing image:', error);
+                });
+            };
+            
+            reader.readAsDataURL(uploadInput.files[0]);
+        }
+    }
+
+    let isFrontCamera = true; 
+
+
+const webcamVideo = document.getElementById('webcamVideo');
+let isCameraOn = false;
+
+// Function to toggle the webcam on and off
+function toggleCamera() {
+    if (isCameraOn) {
+        stopWebcam();
+        cameraSwitchButton.textContent = 'Turn On Camera';
+    } else {
+        startWebcam();
+        cameraSwitchButton.textContent = 'Turn Off Camera';
+    }
+    isCameraOn = !isCameraOn;
+}
+
+
+function startWebcam() {
+    
+    const webcamImage = document.getElementById('webcamImage');
+
+   
+    webcamImage.src = "{{ url_for('video') }}";
+}
+
+
+function stopWebcam() {
+
+    const webcamImage = document.getElementById('webcamImage');
+
+
+    webcamImage.removeAttribute('src');
+}
+
+const cameraSwitchButton = document.getElementById('cameraSwitchButton');
+if (cameraSwitchButton) {
+    cameraSwitchButton.addEventListener('click', toggleCamera);
+}
+
+
+</script>
+</body>
+<footer class="last">
+    <h5>Copyright reserved - DesignbyAyshh</h5>
+</footer>
+</html>
