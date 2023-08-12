@@ -270,11 +270,8 @@ function toggleCamera() {
 
 
 function startWebcam() {
-    
     const webcamImage = document.getElementById('webcamImage');
-
-   
-    webcamImage.src = "{{ url_for('video') }}";
+    webcamImage.src = "/video";  // Use the correct endpoint
 }
 
 

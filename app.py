@@ -1,8 +1,8 @@
 from flask import Flask, render_template, Response, request, send_from_directory
-from camera import Video
 import cv2
 import numpy as np
 import io
+from camera import VideoCamera
 
 app = Flask(__name__)
 
@@ -21,7 +21,7 @@ def gen(camera):
 
 @app.route('/video')
 def video():
-    return Response(gen(Video()),
+    return Response(gen(VideoCamera()),  # Update to VideoCamera
                     mimetype='multipart/x-mixed-replace; boundary=frame')
 
 @app.route('/static/<path:path>')
