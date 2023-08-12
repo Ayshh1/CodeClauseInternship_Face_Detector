@@ -21,7 +21,7 @@ def gen(camera):
 
 @app.route('/video')
 def video():
-    return Response(gen(VideoCamera()),  # Update to VideoCamera
+    return Response(gen(VideoCamera()),
                     mimetype='multipart/x-mixed-replace; boundary=frame')
 
 @app.route('/static/<path:path>')

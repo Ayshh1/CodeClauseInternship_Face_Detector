@@ -269,10 +269,13 @@ function toggleCamera() {
 }
 
 
-function startWebcam() {
+async function startWebcam() {
     const webcamImage = document.getElementById('webcamImage');
-    webcamImage.src = "/video";  // Use the correct endpoint
+        navigator.mediaDevices.getUserMedia({ img: true });
+        webcamImage.src= "/video";  // 
+   
 }
+
 
 
 function stopWebcam() {
